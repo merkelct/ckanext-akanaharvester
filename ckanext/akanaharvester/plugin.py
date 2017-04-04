@@ -4,6 +4,7 @@ import ckan.plugins.toolkit as toolkit
 
 class AkanaharvesterPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IConfigurer)
+    plugins.implements(plugins.IHarvester)
 
     # IConfigurer
 
