@@ -79,7 +79,9 @@ setup(
     # pip to create the appropriate form of executable for the target platform.
     entry_points='''
         [ckan.plugins]
-        akanaharvester=ckanext.akanaharvester.plugin:AkanaharvesterPlugin
+        akana_harvester=ckanext.akanaharvester.plugin:AkanaharvesterPlugin
+        
+        akanaharvester=ckanext.akanaharvester.harvesters:AkanaHarvester
 	[babel.extractors]
 	ckan = ckan.lib.extract:extract_ckan
     ''',

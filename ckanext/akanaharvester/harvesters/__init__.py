@@ -1,0 +1,1 @@
+from ckanext.akanaharvester.harvesters.akana import AkanaHarvester
