@@ -21,6 +21,18 @@ akanaCont = {"title": "THis is a test",
              "keyword": "akana",
              "api-id": "6930cd9c-97d1-47a2-ae4e-e3609a4516fe.enterpriseapi"}
 
+
+# need to break some of this out into a base.py and import
+def get_object_extra(harvest_object, key):
+    '''
+    Helper function for retrieving the value from a harvest object extra,
+    given the key
+    '''
+    for extra in harvest_object.extras:
+        if extra.key == key:
+            return extra.value
+    return None
+
 class AkanaHarvester(SingletonPlugin):
 
     implements(IHarvester)
@@ -69,6 +81,7 @@ class AkanaHarvester(SingletonPlugin):
         :returns: A string with the URL to the original document
         '''
 
+
     def gather_stage(self, harvest_job):
         log = logging.getLogger(__name__ + '.AKANA.gather')
         log.debug('Akana gather_stage for job: %r', harvest_job)
@@ -78,19 +91,20 @@ class AkanaHarvester(SingletonPlugin):
         ids = []
         obid=[]
         ids.append(akanaJSON['api-id'])
-        #this is where we loop through the results collecting ID's and passing them
+        # this is where we loop through the results collecting ID's and passing them
         obj = HarvestObject(guid=ids[0], job=harvest_job, extras=[HOExtra(key='status', value='new')])
         obj.save()
         obid.append(obj.id)
 
         print obj
+        # need to return the list of ID's here that are created above
         return obid
 
     def fetch_stage(self, harvest_object):
         log.debug('In AkanaHarvester fetch_stage')
 
         # Check harvest object status
-        status = self._get_object_extra(harvest_object, 'status')
+        status = get_object_extra(harvest_object, 'status')
 
         if status == 'new':
             try:
@@ -99,8 +113,8 @@ class AkanaHarvester(SingletonPlugin):
                 return True
             except Exception, e:
                 log.exception(e)
-                self._save_object_error('Unable to get content for dataset: %s: %r' % \
-                                        (url, e), harvest_object)
+                log.debug('Unable to get content for dataset: %s: %r' %
+                          (harvest_object, e), harvest_object)
 
     def import_stage(self, harvest_object):
         log.debug('In AkanaHarvester import_stage')
