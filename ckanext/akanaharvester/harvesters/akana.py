@@ -11,71 +11,15 @@ from ckanext.harvest.model import HarvestObjectExtra as HOExtra
 
 log = logging.getLogger(__name__)
 
-akanaJSON = '''{
-            api-id: "6930cd9c-97d1-47a2-ae4e-e3609a4516fe.enterpriseapi",
-            api-gateway: {
-            cname: "test.test.services",
-            target-endpoints: [
-            "http://.local"
-            ],
-            name: "API Gateway Registration API",
-            additional-operations: [
-            {
-            method: "GET",
-            accept: "*/*",
-            uri: "/apis/app-info",
-            content-type: "*/*",
-            proxy-uri: "/app-info"
-            },
-            {
-            uri: "/apis/{apiId}/{versionName}",
-            method: "GET",
-            accept: "*/*",
-            content-type: "*/*"
-            },
-            {
-            uri: "/apis/{apiId}",
-            method: "PUT",
-            accept: "application/json",
-            content-type: "application/json"
-            }
-            ],
-            security-policy: "OAuthSecurity",
-            description: "API for registering other APIs in Monsanto's API gateway. See this API's (Swagger) documents for details.",
-            tags: [
-            "akana",
-            "gateway",
-            "integration",
-            "platform",
-            "engineering"
-            ],
-            enable-chunking: false,
-            groups: [
-            "Monsanto"
-            ],
-            api-admin-emails: [
-            "r@.com",
-            "a@.com",
-            "z@.com",
-            "y@.com",
-            "e@.com",
-            "a@.com",
-            "an@.com"
-            ],
-            platform-tag: "api",
-            proxy-endpoint-info: {
-            protocol: "https",
-            deployment-zone: "test.tst.services",
-            root-path: "api-gateway-api"
-            },
-            operational-policies: [
-            "BasicAuditing",
-            "DetailedAuditingOnError"
-            ],
-            requires-approval: true
-            }
-    }'''
+akanaJSON = {
+            "api-id": "6930cd9c-97d1-47a2-ae4e-e3609a4516fe.enterpriseapi"
 
+    }
+
+akanaCont = {"title": "THis is a test",
+             "url" : "https://www.google.com",
+             "keyword": "akana",
+             "api-id": "6930cd9c-97d1-47a2-ae4e-e3609a4516fe.enterpriseapi"}
 
 class AkanaHarvester(SingletonPlugin):
 
@@ -130,23 +74,32 @@ class AkanaHarvester(SingletonPlugin):
         log.debug('Akana gather_stage for job: %r', harvest_job)
 
         # Get akana ID's contents
-        ids = {}
-        akana = json.loads(akanaJSON)
 
-        for akanaid in akana:
-            ids.update({'akanaAPIID': akanaid['api-id']})
+        ids = []
+        obid=[]
+        ids.append(akanaJSON['api-id'])
+        #this is where we loop through the results collecting ID's and passing them
+        obj = HarvestObject(guid=ids[0], job=harvest_job, extras=[HOExtra(key='status', value='new')])
+        obj.save()
+        obid.append(obj.id)
 
-        return ids
+        print obj
+        return obid
 
     def fetch_stage(self, harvest_object):
         log.debug('In AkanaHarvester fetch_stage')
-        try:
-            harvest_object.content = akanaJSON
-            harvest_object.save()
-            return True
-        except Exception, e:
-            log.exception(e)
-            self._save_object_error('Unable to get content for dataset: %s: %r' % \
+
+        # Check harvest object status
+        status = self._get_object_extra(harvest_object, 'status')
+
+        if status == 'new':
+            try:
+                harvest_object.content = akanaCont
+                harvest_object.save()
+                return True
+            except Exception, e:
+                log.exception(e)
+                self._save_object_error('Unable to get content for dataset: %s: %r' % \
                                         (url, e), harvest_object)
 
     def import_stage(self, harvest_object):
