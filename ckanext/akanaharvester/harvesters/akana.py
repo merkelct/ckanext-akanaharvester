@@ -19,6 +19,7 @@ environ['PING_CLIENT_ID'] = config.get('ckan.harvester.id', '')
 environ['PING_CLIENT_SECRET'] = config.get('ckan.harvester.secret', '')
 pingi_env = config.get('ckan.harvester.pingi.env', '')
 pingi_url = config.get('ckan.harvester.pingi.url', '')
+akana_portal_url = config.get('ckan.harvester.akana.portal.url', '')
 
 # pingi.monsanto
 ping_environments = {pingi_env}
@@ -419,7 +420,7 @@ class AkanaHarvester(SingletonPlugin):
             'resources': [
                 {
                     'name': content_dict['api-gateway']['name'] + ' ' + 'Akana API Portal Link',
-                    'url': 'https://api-portal-np.monsanto.net/#/api/' + content_dict['api-id'] + '/details',
+                    'url': akana_portal_url + content_dict['api-id'] + '/details',
                     'format': 'API'
 
                 }]
