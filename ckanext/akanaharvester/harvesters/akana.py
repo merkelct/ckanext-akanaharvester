@@ -17,12 +17,13 @@ from os import environ
 
 environ['PING_CLIENT_ID'] = config.get('ckan.harvester.id', '')
 environ['PING_CLIENT_SECRET'] = config.get('ckan.harvester.secret', '')
-
+pingi_env = config.get('ckan.harvester.pingi.env', '')
+pingi_url = config.get('ckan.harvester.pingi.url', '')
 
 # pingi.monsanto
-ping_environments = {'NP'}
+ping_environments = {pingi_env}
 ping_urls = {
-    'NP': "https://test.amp.monsanto.com/as/token.oauth2"
+    pingi_env: pingi_url
 }
 
 
