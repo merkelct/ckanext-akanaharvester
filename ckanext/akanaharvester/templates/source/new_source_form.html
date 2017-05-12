@@ -1,0 +1,56 @@
+{% ckan_extends %}
+
+{% block extra_config %}
+
+    {{ super() }}
+{% block akana_harvester %}
+{% if data['config'] is defined  %}
+        {% set conf_obj = h.harvester_str_to_obj(data['config']) %}
+        {% set tags = h.harvester_get_tags(conf_obj['default_tags']) %}
+        {% set grps = h.harvester_get_grps(conf_obj['default_groups']) %}
+        {% set visibility = conf_obj['isprivate'] %}
+        {% set swagger = conf_obj['swagger'] %}
+
+{% endif %}
+
+
+  {% set tag_attrs = {'data-module': 'autocomplete', 'data-module-tags': '', 'data-module-source': '/api/2/util/tag/autocomplete?incomplete=?'} %}
+  {{ form.input('tag_string', id='field-tags', label=_('Default Tags'), placeholder=_('eg. economy, mental health, government'), value=tags, error=errors.tags, classes=['control-full'], attrs=tag_attrs) }}
+  {% set grp_attrs = {'data-module': 'autocomplete', 'data-module-tags': '', 'data-module-source': '/api/2/util/group/autocomplete?incomplete=?'} %}
+  {{ form.input('tag_string', id='field-grps', label=_('Default Groups'), placeholder=_('eg. grp1, grp space2, grp3'), value=grps, error=errors.tags, classes=['control-full'], attrs=grp_attrs) }}
+
+  <div class="control-group">
+    <label for="field-private" class="control-label">{{ _('Visibility') }}</label>
+    <div class="controls">
+      <select id="field-private" name="isprivate">
+          {% if visibility == 'true' %}
+                 <option value="true" selected="selected">Private</option>
+                 <option value="false">Public</option>
+
+          {% else %}
+                <option value="true">Private</option>
+                <option value="false" selected="selected">Public</option>
+          {% endif %}
+      </select>
+    </div>
+  </div>
+
+    <div class="control-group">
+    <label for="field-swagger" class="control-label">{{ _('Include Swagger') }}</label>
+    <div class="controls">
+      <select id="field-swagger" name="swagger">
+          {% if swagger == 'true' %}
+                 <option value="true" selected="selected">True</option>
+                 <option value="false">False</option>
+
+          {% else %}
+                <option value="true">True</option>
+                <option value="false" selected="selected">False</option>
+          {% endif %}
+      </select>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% endblock %}
