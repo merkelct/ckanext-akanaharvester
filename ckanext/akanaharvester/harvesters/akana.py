@@ -399,7 +399,7 @@ class AkanaHarvester(SingletonPlugin):
             tags.append(tag)
 
         for tag in content_dict['api-gateway']['tags']:
-            tags.append({'name': tag})
+            tags.append({'name': tag.replace('=', '-')})
 
         for group in harvester_config['default_groups']:
             groups.append({'name': group})
