@@ -239,7 +239,7 @@ class AkanaHarvester(SingletonPlugin):
                 return True
             except Exception, e:  # TODO p.toolkit.ValidationError handling
                 log.exception(e)
-                self._save_object_error('%r'%e,harvest_object,'Import')
+                self._save_object_error('%r'%e.error_summary, harvest_object,'Import')
 
         # Flag previous object as not current anymore
         if previous_object:
@@ -278,7 +278,7 @@ class AkanaHarvester(SingletonPlugin):
                 log.info('Created new package %s with guid %s', package_id, harvest_object.guid)
             except Exception, e:  # TODO p.toolkit.ValidationError handling
                 log.exception(e)
-                self._save_object_error('%r'%e,harvest_object,'Import')
+                self._save_object_error('%r'%e.error_summary,harvest_object,'Import')
         elif status == 'update':
             try:
 
@@ -325,7 +325,7 @@ class AkanaHarvester(SingletonPlugin):
                 # log.info('Created new package %s with guid %s', package_id, harvest_object.guid)
             except Exception, e:  # TODO p.toolkit.ValidationError handling
                 log.exception(e)
-                self._save_object_error('%r'%e,harvest_object,'Import')
+                self._save_object_error('%r'%e.error_summary,harvest_object,'Import')
 
 
         model.Session.commit()
@@ -409,8 +409,8 @@ class AkanaHarvester(SingletonPlugin):
             groups.append({'name': group})
 
         package_dict.update({
-            'id': id,
-            'name':  id.lower().replace(".","-"),
+            'id': id.lower(),
+            'name':  id.lower().replace(".", "-").replace(" ", "_"),
             'title': content_dict['api-gateway']['name'],
             'notes': content_dict['api-gateway']['description'],
             'private': harvester_config['isprivate'],
