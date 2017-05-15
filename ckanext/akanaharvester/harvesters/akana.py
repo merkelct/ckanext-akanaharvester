@@ -22,7 +22,7 @@ pingi_url = config.get('ckan.harvester.pingi.url', '')
 # akana_portal_url = config.get('ckan.harvester.akana.portal.url', '')
 if pingi_env == 'NP':
     akana_portal_url = "https://api-portal-{0}.monsanto.net/#/api/".format(pingi_url.lower())
-else
+else:
     akana_portal_url = "https://api-portal.monsanto.net/#/api/"
 # pingi.monsanto
 ping_environments = {pingi_env}
