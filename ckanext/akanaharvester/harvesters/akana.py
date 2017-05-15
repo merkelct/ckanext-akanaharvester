@@ -19,8 +19,11 @@ environ['PING_CLIENT_ID'] = config.get('ckan.harvester.id', '')
 environ['PING_CLIENT_SECRET'] = config.get('ckan.harvester.secret', '')
 pingi_env = config.get('ckan.harvester.pingi.env', '')
 pingi_url = config.get('ckan.harvester.pingi.url', '')
-akana_portal_url = config.get('ckan.harvester.akana.portal.url', '')
-
+# akana_portal_url = config.get('ckan.harvester.akana.portal.url', '')
+if pingi_env == 'NP':
+    akana_portal_url = "https://api-portal-{0}.monsanto.net/#/api/".format(pingi_url.lower())
+else
+    akana_portal_url = "https://api-portal.monsanto.net/#/api/"
 # pingi.monsanto
 ping_environments = {pingi_env}
 ping_urls = {
