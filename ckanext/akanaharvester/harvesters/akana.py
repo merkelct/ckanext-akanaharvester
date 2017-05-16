@@ -239,7 +239,7 @@ class AkanaHarvester(SingletonPlugin):
                 return True
             except Exception, e:  # TODO p.toolkit.ValidationError handling
                 log.exception(e)
-                self._save_object_error('%r'%e.error_summary, harvest_object,'Import')
+                self._save_object_error('%r'%e, harvest_object,'Import')
 
         # Flag previous object as not current anymore
         if previous_object:
@@ -261,7 +261,7 @@ class AkanaHarvester(SingletonPlugin):
                         validator_response = v.tag_name_validator(tag['name'], context)
                     except Exception, e:
                         log.exception('Error processing tags: %r', e)
-                        self._save_object_error('Error processing tag: %r', tag, 'Import')
+                        self._save_object_error('%r'%e.error,harvest_object, 'Import')
                         return None
 
                 # Save reference to the package on the object
@@ -276,9 +276,9 @@ class AkanaHarvester(SingletonPlugin):
                 # package_dict = akanaJSON
                 package_id = p.toolkit.get_action('package_create')(context, package_dict)
                 log.info('Created new package %s with guid %s', package_id, harvest_object.guid)
-            except Exception, e:  # TODO p.toolkit.ValidationError handling
+            except Exception, e:
                 log.exception(e)
-                self._save_object_error('%r'%e.error_summary,harvest_object,'Import')
+                self._save_object_error('%r'%e,harvest_object,'Import')
         elif status == 'update':
             try:
 
@@ -308,7 +308,7 @@ class AkanaHarvester(SingletonPlugin):
                         validator_response = v.tag_name_validator(tag['name'], context)
                     except Exception, e:
                         log.exception('Error processing tags: %r', e)
-                        self._save_object_error('Error processing tag: %r', tag, 'Import')
+                        self._save_object_error('%r'%e.error,harvest_object, 'Import')
                         return None
 
                 # Save reference to the package on the object
@@ -325,7 +325,7 @@ class AkanaHarvester(SingletonPlugin):
                 # log.info('Created new package %s with guid %s', package_id, harvest_object.guid)
             except Exception, e:  # TODO p.toolkit.ValidationError handling
                 log.exception(e)
-                self._save_object_error('%r'%e.error_summary,harvest_object,'Import')
+                self._save_object_error('%r'%e,harvest_object,'Import')
 
 
         model.Session.commit()
@@ -400,7 +400,8 @@ class AkanaHarvester(SingletonPlugin):
             tags.append(tag)
 
         for tag in content_dict['api-gateway']['tags']:
-            tags.append({'name': tag.replace('=', '-')})
+            # tags.append({'name': tag.replace('=', '-')})
+            tags.append({'name': tag})
 
         for group in harvester_config['default_groups']:
             groups.append({'name': group})
