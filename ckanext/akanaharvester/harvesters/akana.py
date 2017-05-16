@@ -14,12 +14,11 @@ from ckanext.harvest.model import HarvestObjectExtra as HOExtra
 from urlparse import urlparse
 from os import environ
 
-
-environ['PING_CLIENT_ID'] = config.get('ckan.harvester.id', '')
-environ['PING_CLIENT_SECRET'] = config.get('ckan.harvester.secret', '')
-pingi_env = config.get('ckan.harvester.pingi.env', '')
-pingi_url = config.get('ckan.harvester.pingi.url', '')
-akana_portal_url = config.get('ckan.harvester.akana.portal.url', '')
+environ['PING_CLIENT_ID'] = config['ckan.harvester.id']
+environ['PING_CLIENT_SECRET'] = config['ckan.harvester.secret']
+pingi_env = config['ckan.harvester.pingi.env']
+pingi_url = config['ckan.harvester.pingi.url']
+akana_portal_url = config['ckan.harvester.akana.portal.url']
 
 # pingi.monsanto
 ping_environments = {pingi_env}
