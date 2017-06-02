@@ -23,13 +23,13 @@
     <label for="field-private" class="control-label">{{ _('Visibility') }}</label>
     <div class="controls">
       <select id="field-private" name="isprivate">
-          {% if visibility == 'true' %}
-                 <option value="true" selected="selected">Private</option>
-                 <option value="false">Public</option>
+          {% if not visibility or visibility == 'true' %}
+              <option value="true" selected="selected">Private</option>
+              <option value="false">Public</option>
 
           {% else %}
-                <option value="true">Private</option>
-                <option value="false" selected="selected">Public</option>
+              <option value="true">Private</option>
+              <option value="false" selected="selected">Public</option>
           {% endif %}
       </select>
     </div>
