@@ -115,7 +115,7 @@ class AkanaHarvester(SingletonPlugin):
         # Get akana ID's contents
         # make request to get object from akana based on tag search
         url = harvest_job.source.url
-        pa = PingAuth()
+        pa = PingAuth(environment=pingi_env)
 
         resp = pa.get(url)
         resp_dict = json.loads(resp.content)
